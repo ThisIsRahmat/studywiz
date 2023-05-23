@@ -1,17 +1,4 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+
 'use client'
 // import { useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
@@ -27,9 +14,55 @@ function classNames(...classes) {
 export default function TestForm() {
 
 
+  // const handleSubmit = async (event) => {
+  //   // Stop the form from submitting and refreshing the page.
+  //   event.preventDefault();
+ 
+
+  //   // Get data from the form.
+  //   const data = {
+  //     subject: event.target.subject.value,
+  //     exam_board: event.target.exam_board.value,
+  //     qualification: event.target.qualification.value,
+  //   //   question_style: event.target.question_style.value,
+  //     topic: event.target.topic.value,
+
+  //   };
+ 
+  //   // Send the data to the server in JSON format.
+  //   const JSONdata = JSON.stringify(data);
+ 
+  //   // API endpoint where we send form data.
+  //   const endpoint = '/api/uk_test/';
+ 
+  //   // Form the request for sending data to the server.
+  //   const options = {
+  //     // The method is POST because we are sending data.
+  //     method: 'POST',
+  //     // Tell the server we're sending JSON.
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     // Body of the request is the JSON data we created above.
+  //     body: JSONdata,
+  //   };
+ 
+  //   try {
+  //       const response = await fetch(endpoint, options);
+  //       const result = await response.json();
+    
+  //       // Handle the result or perform any necessary actions.
+  //       console.log(result);
+  //     } catch (error) {
+  //       // Handle any error that occurred during the request.
+  //       console.error('Error:', error);
+  //     }
+    
+  // };
+
   const handleSubmit = async (event) => {
     // Stop the form from submitting and refreshing the page.
-    event.preventDefault();
+    // event.preventDefault();
  
 
     // Get data from the form.
@@ -37,7 +70,7 @@ export default function TestForm() {
       subject: event.target.subject.value,
       exam_board: event.target.exam_board.value,
       qualification: event.target.qualification.value,
-    //   question_style: event.target.question_style.value,
+      // question_style: event.target.question_style.value,
       topic: event.target.topic.value,
 
     };
@@ -46,7 +79,7 @@ export default function TestForm() {
     const JSONdata = JSON.stringify(data);
  
     // API endpoint where we send form data.
-    const endpoint = '/api/uk_test/';
+    const endpoint = '/api/uk_test';
  
     // Form the request for sending data to the server.
     const options = {
@@ -60,18 +93,15 @@ export default function TestForm() {
       body: JSONdata,
     };
  
-    try {
-        const response = await fetch(endpoint, options);
-        const result = await response.json();
-    
-        // Handle the result or perform any necessary actions.
-        console.log(result);
-      } catch (error) {
-        // Handle any error that occurred during the request.
-        console.error('Error:', error);
-      }
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
+ 
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
+    const result = await response;
     
   };
+        
   return (
 <>
 
@@ -94,7 +124,7 @@ export default function TestForm() {
           Use AI to improve your exam scores
         </p>
       </div>
-      <form onSubmit={handleSubmit} action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
+      <form onSubmit={handleSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div className="sm:col-span-2">
         <label htmlFor="phone-number" className="block text-sm font-semibold leading-6 text-gray-900">
@@ -157,7 +187,7 @@ export default function TestForm() {
             </div>
 
 
-            {/* Add different question styles as a different feature */}
+            {/* Add different question styles as a future feature */}
 
 
             
@@ -170,7 +200,7 @@ export default function TestForm() {
           <button
             type="submit"
             className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
+        >
             Create practice questions
           </button>
         </div>
