@@ -1,12 +1,12 @@
 import { Configuration, OpenAIApi } from 'openai';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
-import { render } from 'react-dom';
-import axios from "axios";
+
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error("Missing env var from OpenAI");
+}
 
 const openai = new OpenAIApi(new Configuration({ apiKey: process.env.OPENAI_API_KEY }));
 
-export async function generateQuestionswithstyle(subject, examBoard, qualificationLevel, style, topic) {
+export async function generateQuestionsWithStyle(subject, examBoard, qualificationLevel, style, topic) {
   const questions = [];
 
   for (let i = 1; i <= 6; i++) {
@@ -27,22 +27,19 @@ export async function generateQuestionswithstyle(subject, examBoard, qualificati
   }
 
   return questions;
-                               
 }
 
-export default async function POST(req, res) {
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).end(); // Method Not Allowed
+    return;
+  }
 
-    const { question_style, subject, topic, exam_board, qualification } = req.body;
+  const { question_style, subject, topic, exam_board, qualification } = req.body;
 
-    const questions = await generateQuestions(subject, exam_board, qualification, question_style, topic);
+  const questions = await generateQuestionsWithStyle(subject, exam_board, qualification, question_style, topic);
 
-    console.log(questions);
+  console.log(questions);
 
-    return NextResponse.json({ questions });
-    
-// try {
-//     res.redirect(307, '/$flashcards');
-//   } catch (err) {
-//     res.status(500).send({ error: 'failed to fetch data' });
-
+  res.status(200).json({ questions });
 }

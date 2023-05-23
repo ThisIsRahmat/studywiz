@@ -1,10 +1,10 @@
 'use client'
 
-import DashboardNav from '../../components/dashboard/Nav';
+import DashboardNav from '../../components/dashboard/DashboardNav';
 import EmptyState from '../../components/dashboard/EmptyState';
 import { PlusIcon } from '@heroicons/react/20/solid'
 import {useRouter} from 'next/navigation'
-
+import Footer from '../../components/tests/Footer';
 
 
 export default function Dashboard() {
@@ -34,7 +34,13 @@ const handleClick = event => {
           New Project
         </button>
         </EmptyState >
+
         </div>
+
+        <div>
+        <Footer/>
+          </div>
+               
       </div>
       
 
