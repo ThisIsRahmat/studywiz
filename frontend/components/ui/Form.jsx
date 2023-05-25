@@ -43,7 +43,7 @@ export default function TestForm() {
             // Redirect to the flashcard page with the generated questions
             router.push({
               pathname: '/flashcard',
-              query: { questions: data.questions  },
+              query: { questions: data.questions, subject: data.subject, exam_board: data.exam_board, qualification: data.qualification , topic: data.topic  },
     
             });
           })

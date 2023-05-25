@@ -12,7 +12,7 @@ export default function FlashcardsPage() {
 
    const router = useRouter();
    const {
-    query: { questions },
+    query: { questions, subject, exam_board, qualification, topic },
   } = router
   if (!questions?.length) {
     return <p>Loading questions...</p>;
@@ -23,6 +23,17 @@ export default function FlashcardsPage() {
 
       <Header />
 
+      <div className="mx-auto max-w-2xl text-center">
+        <h4 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        {subject}  questions on the topic of {topic}
+        </h4>
+        <p className="mt-2 text-lg leading-8 text-gray-600">
+        {/* Subject: {subject}, Topic: {topic} */}
+        </p>
+      </div>
+      <h1 className="text-2xl font-bold mb-4 mt-8">
+       
+      </h1>
         
             {questions.length ? (
         <Flashcard questions={questions} />
@@ -30,23 +41,6 @@ export default function FlashcardsPage() {
         ) : (
           <p>No questions available.</p>
         )}
-
-{/* <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-          <button
-            type="submit"
-            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Previous
-          </button>
-
-          <button
-            type="submit"
-            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Next
-          </button>
-  </div> */}
-
 
 
       <Footer />

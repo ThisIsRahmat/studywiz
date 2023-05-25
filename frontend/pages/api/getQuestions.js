@@ -31,8 +31,16 @@ export default async function handler(req, res) {
 
     try {
       const questions = await generateQuestions(subject, exam_board, qualification, topic);
-      res.status(200).json({ questions });
+      res.status(200).json({  questions,
+        subject,
+        exam_board,
+        qualification,
+        topic});
       console.log(`This is print out from the api ${questions}`)
+      console.log(`This is print out from the api ${subject}
+        ${exam_board}
+        ${qualification},
+        ${topic}`)
     } catch (error) {
       res.status(500).json({ error: 'Failed to generate questions' });
     }
