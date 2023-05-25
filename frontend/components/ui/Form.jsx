@@ -5,64 +5,55 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Switch } from '@headlessui/react'
 // import Header from '../../components/ui/Header';
 import { useRouter } from 'next/router';
+import {useState} from 'react'
 
 export default function TestForm() {
+       
+    const router = useRouter();
+    const [formValues, setFormValues] = useState({
+      subject: '',
+      topic: '',
+      exam_board: '',
+      qualification: '',
+    });
+  
+    const handleChange = (event) => {
 
-    const router = useRouter()
-
-    const handleSubmit = async (event) => {
-    // Stop the form from submitting and refreshing the page.
-    event.preventDefault();
- 
-
-    // Get data from the form.
-    // const data = {
-    //   subject: event.target.subject,
-    //   exam_board: event.target.exam_board,
-    //   qualification: event.target.qualification,
-    //   // question_style: event.target.question_style.value,
-    //   topic: event.target.topic
-
-    // };
- 
-    // Send the data to the server in JSON format.
-    // const JSONdata = JSON.stringify(data);
- 
-    // API endpoint where we send form data.
-    // const endpoint = '/api/test_generate';
- 
-    // Form the request for sending data to the server.
-    // const options = {
-    //   // The method is POST because we are sending data.
-    //   method: 'POST',
-    //   // Tell the server we're sending JSON.
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   // Body of the request is the JSON data we created above.
-    //   body: JSONdata,
-    // };
- 
-    // Send the form data to our forms API on Vercel and get a response.
-    // const response = await fetch(endpoint, options);
- 
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    // const questions = await response.json();
-
-    //  res.redirect('/test');
-
-    router.push({
-        pathname: "/flashcard",
-        query: {
-          subject: "",
-          topic: "",
-          exam_board: "",
-          qualification: "",
-        },
-      });
+      const { name, value } = event.target;
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
+    };
+  
+    const handleSubmit = (event) => {
+        event.preventDefault();
     
-  };
+        // Make a POST request to the API route with the form data
+        fetch('/api/getQuestions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formValues),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data)
+            // Redirect to the flashcard page with the generated questions
+            router.push({
+              pathname: '/flashcard',
+              query: { questions: data.questions  },
+    
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+    
+  
         
   return (
 <>
@@ -86,7 +77,9 @@ export default function TestForm() {
           Use AI to improve your exam scores
         </p>
       </div>
-      <form  method="POST" onClick={handleSubmit} className="mx-auto mt-16 max-w-xl sm:mt-20">
+     
+     <form  method="POST" onSubmit={handleSubmit} className="mx-auto mt-16 max-w-xl sm:mt-20">
+      {/* <form  method="POST" action="/flashcard" className="mx-auto mt-16 max-w-xl sm:mt-20"> */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div className="sm:col-span-2">
         <label htmlFor="phone-number" className="block text-sm font-semibold leading-6 text-gray-900">
@@ -97,7 +90,8 @@ export default function TestForm() {
                   id="qualification"
                   name="qualification"
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                
+                value={formValues.qualification}
+                <option>Select</option>
                   <option>GCSE</option>
                   <option>A-Level</option>
         
@@ -110,13 +104,17 @@ export default function TestForm() {
             </label>
             <div className="mt-2.5">
             <select
+               vlaue={formValues.exam_board}
+               onChange={handleChange}
                   id="exam_board"
                   name="exam_board"
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                
+             
+                <option>Select</option>
                   <option>AQA</option>
                   <option>Edexcel</option>
                   <option>OCR</option>
+               
                 </select>
             </div>
         </div>
@@ -130,7 +128,9 @@ export default function TestForm() {
                 name="subject"
                 id="subject"
                 placeholder="Biology"
+                value={formValues.subject}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -143,8 +143,10 @@ export default function TestForm() {
                 type="text"
                 name="topic"
                 id="topic"
+                value={formValues.topic}
                 placeholder="Photosynthesis"
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={handleChange}
               />
             </div>
 
