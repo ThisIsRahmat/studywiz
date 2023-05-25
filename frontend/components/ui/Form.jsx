@@ -6,52 +6,59 @@ import { Switch } from '@headlessui/react'
 // import Header from '../../components/ui/Header';
 import { useRouter } from 'next/router';
 import {useState} from 'react'
+import LoadingDots from '../../components/ui/LoadingDots';
+
 
 export default function TestForm() {
-       
-    const router = useRouter();
-    const [formValues, setFormValues] = useState({
-      subject: '',
-      topic: '',
-      exam_board: '',
-      qualification: '',
-    });
-  
-    const handleChange = (event) => {
+  const router = useRouter();
+  const [formValues, setFormValues] = useState({
+    subject: '',
+    topic: '',
+    exam_board: '',
+    qualification: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
-      const { name, value } = event.target;
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        [name]: value,
-      }));
-    };
-  
-    const handleSubmit = (event) => {
-        event.preventDefault();
-    
-        // Make a POST request to the API route with the form data
-        fetch('/api/getQuestions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    // Make a POST request to the API route with the form data
+    fetch('/api/getQuestions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formValues),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setIsLoading(false);
+        // Redirect to the flashcard page with the generated questions
+        router.push({
+          pathname: '/flashcard',
+          query: {
+            questions: data.questions,
+            subject: data.subject,
+            exam_board: data.exam_board,
+            qualification: data.qualification,
+            topic: data.topic,
           },
-          body: JSON.stringify(formValues),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            // console.log(data)
-            // Redirect to the flashcard page with the generated questions
-            router.push({
-              pathname: '/flashcard',
-              query: { questions: data.questions, subject: data.subject, exam_board: data.exam_board, qualification: data.qualification , topic: data.topic  },
-    
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      };
-
+        });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error(error);
+      });
+  };
     
   
         
@@ -160,13 +167,18 @@ export default function TestForm() {
     
         </div>
         <div className="mt-10">
-          <button
-            type="submit"
-            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-            Create practice questions
-          </button>
-        </div>
+            {isLoading ? (
+              <LoadingDots />
+            ) : (
+              <button
+                type="submit"
+                className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={isLoading}
+              >
+                Create practice questions
+              </button>
+            )}
+          </div>
       </form>
     </div>
     </>
