@@ -25,7 +25,7 @@ export default function FlashcardsPage() {
 
       <div className="mx-auto max-w-2xl text-center">
         <h4 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-        {subject}  questions on the topic of {topic}
+    {qualification} {subject}  questions: {topic}
         </h4>
         <p className="mt-2 text-lg leading-8 text-gray-600">
         {/* Subject: {subject}, Topic: {topic} */}
