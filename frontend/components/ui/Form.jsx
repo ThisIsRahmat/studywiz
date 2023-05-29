@@ -6,59 +6,53 @@ import { Switch } from '@headlessui/react'
 // import Header from '../../components/ui/Header';
 import { useRouter } from 'next/router';
 import {useState} from 'react'
-import LoadingDots from '../../components/ui/LoadingDots';
-
 
 export default function TestForm() {
-  const router = useRouter();
-  const [formValues, setFormValues] = useState({
-    subject: '',
-    topic: '',
-    exam_board: '',
-    qualification: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
+       
+    const router = useRouter();
+    const [formValues, setFormValues] = useState({
+      subject: '',
+      topic: '',
+      exam_board: '',
+      qualification: '',
+      style: '',
+    });
+  
+    const handleChange = (event) => {
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    // Make a POST request to the API route with the form data
-    fetch('/api/getQuestions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formValues),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setIsLoading(false);
-        // Redirect to the flashcard page with the generated questions
-        router.push({
-          pathname: '/flashcard',
-          query: {
-            questions: data.questions,
-            subject: data.subject,
-            exam_board: data.exam_board,
-            qualification: data.qualification,
-            topic: data.topic,
+      const { name, value } = event.target;
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
+    };
+  
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    
+        // Make a POST request to the API route with the form data
+        fetch('/api/getQuestions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        });
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.error(error);
-      });
-  };
+          body: JSON.stringify(formValues),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data)
+            // Redirect to the flashcard page with the generated questions
+            router.push({
+              pathname: '/flashcard',
+              query: { questions: data.questions  },
+    
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
     
   
         
@@ -98,7 +92,7 @@ export default function TestForm() {
                   name="qualification"
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 value={formValues.qualification}
-                <option>Select</option>
+                <option>--Please choose an option--</option>
                   <option>GCSE</option>
                   <option>A-Level</option>
         
@@ -117,7 +111,7 @@ export default function TestForm() {
                   name="exam_board"
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
              
-                <option>Select</option>
+                <option>--Please choose an option--</option>
                   <option>AQA</option>
                   <option>Edexcel</option>
                   <option>OCR</option>
@@ -159,45 +153,40 @@ export default function TestForm() {
 
 
             {/* Add different question styles as a future feature */}
+
+
             <div className="sm:col-span-2">
         <label htmlFor="phone-number" className="block text-sm font-semibold leading-6 text-gray-900">
-              What style of questions do you want?
+              What style of questions would you prefer?
             </label>
             <div className="mt-2.5">
             <select
-               vlaue={formValues.question_style}
+               vlaue={formValues.style}
                onChange={handleChange}
-                  id="question_style"
-                  name="question_style"
+                  id="style"
+                  name="style"
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
              
-                <option>Select</option>
-                  <option> Multiple choice</option>
-                  <option>True or false</option>
-                  <option>Fill in the blank</option>
+                <option>--Please choose an option--</option>
+                  <option>Multiple choice</option>
+                  <option>True and False</option>
+                  <option>Fill in the blanks</option>
                
                 </select>
             </div>
         </div>
-
-            
           </div>
          
     
         </div>
         <div className="mt-10">
-            {isLoading ? (
-              <LoadingDots />
-            ) : (
-              <button
-                type="submit"
-                className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                disabled={isLoading}
-              >
-                Create practice questions
-              </button>
-            )}
-          </div>
+          <button
+            type="submit"
+            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+            Create practice questions
+          </button>
+        </div>
       </form>
     </div>
     </>

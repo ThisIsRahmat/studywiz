@@ -12,15 +12,15 @@ export default function FlashcardsPage() {
 
    const router = useRouter();
    const {
-    query: { questions, subject, exam_board, qualification, topic },
+    query: { questions, subject, exam_board, qualification, topic, answer, style },
   } = router
   if (!questions?.length) {
-    return <p>There were no questions generated, have a look at your openai api.</p>;
+    return <p>There were no questions generated, have a look at your openai, you might be rate limited.</p>;
   }
 
    // Render flashcard content based on the style
    const renderFlashcardContent = () => {
-    if (style === 'multiple choice') {
+    if (style === 'Multiple choice') {
       // Render multiple choice flashcard content
       return (
         <>
@@ -40,7 +40,7 @@ export default function FlashcardsPage() {
           ))}
         </>
       );
-    } else if (style === 'fill in the blank') {
+    } else if (style === 'Fill in the blanks') {
       // Render fill in the blank flashcard content
       return (
         <>
@@ -54,7 +54,7 @@ export default function FlashcardsPage() {
           ))}
         </>
       );
-    } else if (style === 'true and false') {
+    } else if (style === 'True and False') {
       // Render true and false flashcard content
       return (
         <>
