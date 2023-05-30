@@ -18,7 +18,7 @@ function App({ Component, pageProps }) {
     //  - This must be an exact match of your domain.
     //  - If you're using www. for your domain, make sure you include that here.
     Fathom.load('MFNNEHOW', {
-      includedDomains: ['https://studywiz.co/'],
+      includedDomains: ['studywiz.co'],
     });
 
     function onRouteChangeComplete() {
