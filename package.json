@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "fathom-client": "^3.5.0"
+  }
+}
